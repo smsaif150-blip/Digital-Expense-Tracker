@@ -47,10 +47,10 @@ fun splashActivity(onNavHost:()-> Unit)
             modifier = Modifier.padding(top = 16.dp))
         Text("Better", fontSize = 24.sp, color = Color.Black, fontWeight = FontWeight.Bold)
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(36.dp))
         CircularProgressIndicator(
             color = Color.Black,
-            trackColor = Color.Black
+            trackColor = Color.LightGray
         )
     }
 }
