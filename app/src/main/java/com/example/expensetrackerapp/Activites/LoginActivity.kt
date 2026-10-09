@@ -27,12 +27,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.expensetrackerapp.ui.theme.Blue
 import com.example.expensetrackerapp.ui.theme.ExpenseTrackerAppTheme
 import com.example.expensetrackerapp.ui.theme.Light_gray
+import com.example.expensetrackerapp.viewmodel.LoginViewmodel
 
 @Composable
-fun LoginActivity()
+fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
 {
     Box(modifier = Modifier.fillMaxSize().background(color = Blue)){
 
@@ -99,11 +101,11 @@ fun LoginActivity()
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun showLoginActivity()
-{
-    ExpenseTrackerAppTheme {
-        LoginActivity()
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun showLoginActivity()
+//{
+//    ExpenseTrackerAppTheme {
+//        LoginActivity()
+//    }
+//}

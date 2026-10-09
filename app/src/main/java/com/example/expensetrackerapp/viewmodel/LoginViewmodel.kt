@@ -1,4 +1,6 @@
 package com.example.expensetrackerapp.viewmodel
 
-class LoginViewmodel {
+import androidx.lifecycle.ViewModel
+
+class LoginViewmodel: ViewModel() {
 }

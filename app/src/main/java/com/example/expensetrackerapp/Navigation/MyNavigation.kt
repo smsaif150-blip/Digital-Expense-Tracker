@@ -22,7 +22,12 @@ fun MyNavigation()
         composable("splash")
         {
             splashActivity{
-                navController.navigate("SignUp")
+                navController.navigate("SignUp"){
+                    popUpTo("splash")
+                    {
+                        inclusive = true
+                    }
+                }
             }
         }
         composable("SignUp")
