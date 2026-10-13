@@ -5,13 +5,15 @@ import androidx.lifecycle.ViewModel
 import com.example.expensetrackerapp.model.User
 import com.example.expensetrackerapp.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-class SignUpViewmodel: ViewModel(){
-    private val auth = FirebaseAuth.getInstance()
-    private val db = FirebaseFirestore.getInstance()
+import javax.inject.Inject
+
+@HiltViewModel
+class SignUpViewmodel @Inject constructor(private val auth: FirebaseAuth,
+                                           private val db: FirebaseFirestore ) : ViewModel(){
     private val _signupState = MutableStateFlow<Resource>(Resource.Test)
     val signupState: StateFlow<Resource> = _signupState
     private val _emailError = MutableStateFlow<String?>(null)

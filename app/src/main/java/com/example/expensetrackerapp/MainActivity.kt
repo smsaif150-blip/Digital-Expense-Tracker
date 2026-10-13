@@ -13,7 +13,9 @@ import com.example.expensetrackerapp.Activites.SignUpActivity
 import com.example.expensetrackerapp.Activites.splashActivity
 import com.example.expensetrackerapp.Navigation.MyNavigation
 import com.example.expensetrackerapp.ui.theme.ExpenseTrackerAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

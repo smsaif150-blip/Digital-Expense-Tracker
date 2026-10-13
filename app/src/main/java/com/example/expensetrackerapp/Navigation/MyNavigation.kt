@@ -5,11 +5,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.expensetrackerapp.Activites.HomeActivity
 import com.example.expensetrackerapp.Activites.LoginActivity
 import com.example.expensetrackerapp.Activites.SignUpActivity
 import com.example.expensetrackerapp.Activites.splashActivity
 import com.example.expensetrackerapp.viewmodel.LoginViewmodel
 import com.example.expensetrackerapp.viewmodel.SignUpViewmodel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun MyNavigation()
@@ -37,6 +40,10 @@ fun MyNavigation()
         composable("LogIn")
         {
             LoginActivity(navController,loginViewmodel)
+        }
+        composable("home")
+        {
+            HomeActivity()
         }
     }
 }
