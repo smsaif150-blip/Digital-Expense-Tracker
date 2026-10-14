@@ -77,6 +77,7 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
     var isLoading by remember {
         mutableStateOf(false)
     }
+
     val context = LocalContext.current
 
     LaunchedEffect(signupState) {

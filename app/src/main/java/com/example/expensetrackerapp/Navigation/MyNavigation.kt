@@ -11,8 +11,6 @@ import com.example.expensetrackerapp.Activites.SignUpActivity
 import com.example.expensetrackerapp.Activites.splashActivity
 import com.example.expensetrackerapp.viewmodel.LoginViewmodel
 import com.example.expensetrackerapp.viewmodel.SignUpViewmodel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun MyNavigation()

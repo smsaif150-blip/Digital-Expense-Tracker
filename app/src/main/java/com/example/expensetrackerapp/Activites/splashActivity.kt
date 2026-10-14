@@ -29,7 +29,7 @@ fun splashActivity(onNavHost:()-> Unit)
 {
 
     LaunchedEffect(true) {
-        delay(2000L)
+        delay(1000L)
         onNavHost()
     }
 

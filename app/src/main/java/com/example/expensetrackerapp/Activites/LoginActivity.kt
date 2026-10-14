@@ -1,5 +1,7 @@
 package com.example.expensetrackerapp.Activites
 
+import android.R
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -45,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.expensetrackerapp.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 
+
 @Composable
 fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
 {
@@ -52,7 +57,8 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
     val emailError by loginViewmodel.emailError.collectAsState()
     val passwordError by loginViewmodel.passwordError.collectAsState()
     val loginState by loginViewmodel.loginState.collectAsState()
-
+    val resetPassState by loginViewmodel.resetPassState.collectAsState()
+    val resetEmailError by loginViewmodel.resetEmailError.collectAsState()
     val context = LocalContext.current
     var isLoading by remember {
         mutableStateOf(false)
@@ -63,6 +69,25 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
     }
     var password by remember {
         mutableStateOf("")
+    }
+    var showResetPasswordDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var resetEmail by remember {
+        mutableStateOf("")
+    }
+    LaunchedEffect(resetPassState) {
+        when(resetPassState)
+        {
+            is Resource.Success -> {
+                Toast.makeText(context,"go to your mail inbox or spam box", Toast.LENGTH_SHORT).show()
+            }
+            is Resource.Failure -> {
+                Toast.makeText(context,(resetPassState as Resource.Failure).message, Toast.LENGTH_SHORT).show()
+            }
+            else -> Unit
+        }
     }
     LaunchedEffect(loginState) {
         when(loginState)
@@ -159,9 +184,15 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
 
 
                 Spacer(modifier = Modifier.padding(10.dp))
-                TextButton(onClick = {}, modifier = Modifier.padding(start = 120.dp)) {
+                TextButton(onClick = {
+                    showResetPasswordDialog = true
+                }, modifier = Modifier.padding(start = 120.dp)) {
                     Text("Forgot Password?", fontSize = 14.sp, color = Blue, fontWeight = FontWeight.Bold)
                 }
+
+
+
+
 
                 Button(onClick = {
                     loginViewmodel.Login(email.trim(),password.trim())
@@ -207,6 +238,47 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
 
             }
         }
+    }
+
+    if (showResetPasswordDialog)
+    {
+        AlertDialog(
+            onDismissRequest = {showResetPasswordDialog = false},
+            title = {Text(text = "Want to reset password?")},
+            text = {
+                OutlinedTextField(value = resetEmail,
+                    onValueChange = {resetEmail = it
+                                    loginViewmodel.onResetEmailChange()},
+                    label = {Text("Enter email for reset password")},
+                    supportingText = {
+                        if (resetEmailError != null) {
+                            Text(
+                                text = resetEmailError.toString(),
+                                color = Color.Red
+                            )
+                        }
+                    }
+                    )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    if (loginViewmodel.resetEmailValidation(resetEmail))
+                    {
+                        return@TextButton
+                    }
+                    loginViewmodel.resetPassword(resetEmail.trim())
+                    showResetPasswordDialog = false
+                    resetEmail = ""
+                }) {
+                    Text(text = "Confirm")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {showResetPasswordDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }
 

@@ -21,6 +21,11 @@ class LoginViewmodel @Inject constructor(private val auth: FirebaseAuth): ViewMo
     private val _loginState = MutableStateFlow<Resource>(Resource.Test)
     val loginState: StateFlow<Resource> = _loginState
 
+    private val _resetPassState = MutableStateFlow<Resource>(Resource.Test)
+    val resetPassState: StateFlow<Resource> = _resetPassState
+    private val _resetEmailError = MutableStateFlow<String?>(null)
+    val resetEmailError: StateFlow<String?> = _resetEmailError
+
     fun onEmailChange()
     {
         _emailError.value = null
@@ -65,4 +70,37 @@ class LoginViewmodel @Inject constructor(private val auth: FirebaseAuth): ViewMo
                 _loginState.value = Resource.Failure(it.message.toString())
             }
     }
+
+    fun resetEmailValidation(email: String): Boolean
+    {
+        if (email.isEmpty())
+        {
+            _resetEmailError.value = "Please Enter your email to reset your password"
+            return true
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+        {
+            _resetEmailError.value = "Wrong email formate"
+            return true
+        }
+        return false
+    }
+
+    fun onResetEmailChange()
+    {
+        _resetEmailError.value = null
+    }
+    fun resetPassword(email: String)
+    {
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                _resetPassState.value = Resource.Success
+            }.addOnFailureListener {
+                _resetPassState.value = Resource.Failure(it.message.toString())
+            }
+
+
+    }
+
 }
