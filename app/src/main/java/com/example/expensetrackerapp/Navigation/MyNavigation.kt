@@ -11,6 +11,9 @@ import com.example.expensetrackerapp.Activites.SignUpActivity
 import com.example.expensetrackerapp.Activites.splashActivity
 import com.example.expensetrackerapp.viewmodel.LoginViewmodel
 import com.example.expensetrackerapp.viewmodel.SignUpViewmodel
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @Composable
 fun MyNavigation()
@@ -23,10 +26,22 @@ fun MyNavigation()
         composable("splash")
         {
             splashActivity{
-                navController.navigate("SignUp"){
-                    popUpTo("splash")
+                if (loginViewmodel.isUserLoggedIn())
+                {
+                    navController.navigate("home")
                     {
-                        inclusive = true
+                        popUpTo("splash")
+                        {
+                            inclusive = true
+                        }
+                    }
+                } else
+                {
+                    navController.navigate("SignUp"){
+                        popUpTo("splash")
+                        {
+                            inclusive = true
+                        }
                     }
                 }
             }

@@ -36,6 +36,10 @@ class LoginViewmodel @Inject constructor(private val auth: FirebaseAuth): ViewMo
         _passwordError.value = null
     }
 
+    fun isUserLoggedIn():Boolean
+    {
+       return auth.currentUser!=null
+    }
     fun Login(email: String, password: String)
     {
         if (email.isEmpty())
@@ -99,8 +103,5 @@ class LoginViewmodel @Inject constructor(private val auth: FirebaseAuth): ViewMo
             }.addOnFailureListener {
                 _resetPassState.value = Resource.Failure(it.message.toString())
             }
-
-
     }
-
 }

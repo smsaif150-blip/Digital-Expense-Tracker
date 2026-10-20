@@ -1,14 +1,365 @@
 package com.example.expensetrackerapp.Activites
 
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.expensetrackerapp.R
+import com.example.expensetrackerapp.repository.DummyData
+import com.example.expensetrackerapp.ui.theme.Bills_green
+import com.example.expensetrackerapp.ui.theme.Blue_tined_white
+import com.example.expensetrackerapp.ui.theme.Deep_blue
+import com.example.expensetrackerapp.ui.theme.Food_orange
+import com.example.expensetrackerapp.ui.theme.Gray_icon
+import com.example.expensetrackerapp.ui.theme.Health_red
+import com.example.expensetrackerapp.ui.theme.Light_blue
+import com.example.expensetrackerapp.ui.theme.Navy_blue
+import com.example.expensetrackerapp.ui.theme.Primary_blue
+import com.example.expensetrackerapp.ui.theme.Pure_white
+import com.example.expensetrackerapp.ui.theme.Shopping_purple
+import com.example.expensetrackerapp.ui.theme.Travel_blue
+import java.util.UUID
+import kotlin.math.exp
 
 @Composable
-fun HomeActivity()
-{
-    Column(modifier = Modifier.fillMaxSize()) {
+fun HomeActivity() {
 
+    val Expenses = DummyData()
+
+    Scaffold(
+        bottomBar = {
+            BottomAppBar(
+                containerColor = Color.White,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+            ) {
+                IconButton(onClick = {}, modifier = Modifier.weight(1f)) {
+                    Icon(
+                        imageVector = Icons.Default.Home,
+                        contentDescription = null,
+                        tint = Color.Black
+                    )
+                }
+                IconButton(onClick = {}, modifier = Modifier.weight(1f)) {
+                    Icon(
+                        painter = painterResource(R.drawable.expense),
+                        contentDescription = null,
+                        tint = Color.Black
+                    )
+                }
+
+                FloatingActionButton(onClick = {},
+                    shape = CircleShape,
+                    containerColor = Primary_blue) {
+                    Icon(imageVector = Icons.Default.Add,null, tint = Pure_white)
+                }
+
+                IconButton(onClick = {}, modifier = Modifier.weight(1f)) {
+                    Icon(
+                        painter = painterResource(R.drawable.analytics),
+                        contentDescription = null,
+                        tint = Color.Black
+                    )
+                }
+
+                IconButton(onClick = {}, modifier = Modifier.weight(1f)) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = null,
+                        tint = Color.Black
+                    )
+                }
+            }
+        }
+    ) { innerPadding ->
+
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(color = Blue_tined_white)) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(230.dp)
+                    .background(
+                        brush = Brush.linearGradient(
+                            colors = listOf(
+                                Deep_blue, Primary_blue
+                            )
+                        ), shape = RoundedCornerShape(bottomStart = 22.dp, bottomEnd = 22.dp)
+                    )
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 60.dp, start = 24.dp, end = 24.dp)
+                    ) {
+                        Column {
+                            Text(
+                                "Hello,",
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Text(
+                                "Saif",
+                                fontSize = 28.sp,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = null,
+                            modifier = Modifier.size(54.dp),
+                            tint = Color.White
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Column(modifier = Modifier.padding(start = 24.dp)) {
+                        Text(
+                            text = "Keep track of your expense",
+                            fontSize = 12.sp,
+                            lineHeight = 12.sp,
+                            color = Color.White
+                        )
+                        Text(
+                            text = "and build a better tomorrow",
+                            fontSize = 12.sp,
+                            lineHeight = 12.sp,
+                            color = Color.White
+                        )
+                    }
+                }
+
+                Card(
+                    colors = CardDefaults.cardColors(Navy_blue),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 110.dp, start = 24.dp, end = 24.dp)
+                        .height(120.dp)
+                        .offset(y = 80.dp),
+                    elevation = CardDefaults.cardElevation(6.dp)
+                ) {
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp, vertical = 16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text("Total Expense", color = Color.White, fontSize = 12.sp)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                "৳ 12,450",
+                                color = Color.White,
+                                fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(" +12%", color = Color.Green, fontSize = 12.sp)
+                                Spacer(modifier = Modifier.padding(horizontal = 7.dp))
+                                Text("than last week", color = Color.Gray, fontSize = 12.sp)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.weight(1f))
+                        Box(
+                            modifier = Modifier
+                                .size(80.dp)
+                                .background(
+                                    color = Color.White.copy(alpha = 0.12f),
+                                    CircleShape
+                                ), contentAlignment = Alignment.Center
+                        )
+                        {
+                            Image(
+                                painter = painterResource(R.drawable.expenses),
+                                contentDescription = null,
+                                modifier = Modifier.size(64.dp)
+                            )
+                        }
+
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, top = 90.dp)
+            ) {
+                Text(
+                    "Categories",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Text("View All >", color = Primary_blue)
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            )
+            {
+                CategoryId(R.drawable.food, Food_orange, "Food", "3240")
+                CategoryId(R.drawable.travel, Travel_blue, "Travel", "2800")
+                CategoryId(R.drawable.shopping, Shopping_purple, "Shopping", "1950")
+                CategoryId(R.drawable.bills, Bills_green, "Bills", "2420")
+                CategoryId(R.drawable.health, Health_red, "Health", "1200")
+                CategoryId(R.drawable.other, Gray_icon, "Other", "840")
+            }
+
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .height(260.dp),
+                elevation = CardDefaults.cardElevation(1.dp),
+                colors = CardDefaults.cardColors(Pure_white)
+            ) {
+
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 12.dp, end = 12.dp, top = 12.dp)
+                ) {
+                    Text("Recent Expenses", fontWeight = FontWeight.Bold, color = Color.Black)
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text("View All >", color = Primary_blue)
+
+                }
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(Expenses) { expense ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 12.dp, end = 16.dp, top = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(width = 48.dp, height = 48.dp)
+                                    .background(
+                                        color = expense.color.copy(alpha = 0.2f),
+                                        CircleShape
+                                    ),
+                                contentAlignment = Alignment.Center
+                            )
+                            {
+                                Icon(
+                                    painter = painterResource(expense.image),
+                                    contentDescription = null, tint = expense.color
+                                )
+                            }
+                            Spacer(modifier = Modifier.padding(horizontal = 8.dp))
+                            Column(verticalArrangement = Arrangement.Center) {
+                                Text(expense.title, color = Color.Black, fontSize = 14.sp)
+//                            Spacer(modifier = Modifier.padding(vertical = 1.dp))
+                                Row {
+                                    Text(expense.category, fontSize = 10.sp)
+                                    Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                                    Text(expense.date, fontSize = 10.sp)
+                                }
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text("৳ "+expense.expense)
+                        }
+                    }
+                }
+
+            }
+
+        }
     }
+}
+
+@Composable
+fun CategoryId(image: Int, color: Color, text: String, expense: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier.size(width = 48.dp, height = 48.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = color.copy(alpha = 0.2f),
+                        RoundedCornerShape(12.dp)
+                    ), contentAlignment = Alignment.Center
+            )
+            {
+                Icon(
+                    painter = painterResource(image),
+                    contentDescription = null,
+                    tint = color // এখানে সরাসরি tint ব্যবহার করা যায়
+                )
+
+            }
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(text, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+        Spacer(modifier = Modifier.height(3.dp))
+        Text("৳" + expense, color = Color.Black, fontSize = 10.sp)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun showHome() {
+    HomeActivity()
 }
