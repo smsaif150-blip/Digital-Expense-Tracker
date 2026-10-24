@@ -3,6 +3,7 @@ package com.example.expensetrackerapp.Activites
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.expensetrackerapp.R
 import com.example.expensetrackerapp.repository.DummyData
 import com.example.expensetrackerapp.ui.theme.Bills_green
@@ -61,7 +63,7 @@ import java.util.UUID
 import kotlin.math.exp
 
 @Composable
-fun HomeActivity() {
+fun HomeActivity(navController: NavController) {
 
     val Expenses = DummyData()
 
@@ -73,41 +75,63 @@ fun HomeActivity() {
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
             ) {
-                IconButton(onClick = {}, modifier = Modifier.weight(1f)) {
+
+
+                Column (modifier = Modifier.weight(1f).clickable{}.padding(vertical = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center){
                     Icon(
-                        imageVector = Icons.Default.Home,
+                        painter = painterResource(R.drawable.home),
                         contentDescription = null,
                         tint = Color.Black
                     )
+                    Text("Home", fontSize = 12.sp)
                 }
-                IconButton(onClick = {}, modifier = Modifier.weight(1f)) {
+
+                Column (modifier = Modifier.weight(1f).clickable{}.padding(vertical = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center){
                     Icon(
                         painter = painterResource(R.drawable.expense),
                         contentDescription = null,
                         tint = Color.Black
                     )
+                    Text("Expense", fontSize = 12.sp)
                 }
 
-                FloatingActionButton(onClick = {},
+                FloatingActionButton(onClick = {
+                    navController.navigate("addExpense")
+                },
                     shape = CircleShape,
                     containerColor = Primary_blue) {
                     Icon(imageVector = Icons.Default.Add,null, tint = Pure_white)
                 }
 
-                IconButton(onClick = {}, modifier = Modifier.weight(1f)) {
-                    Icon(
-                        painter = painterResource(R.drawable.analytics),
-                        contentDescription = null,
-                        tint = Color.Black
-                    )
-                }
 
-                IconButton(onClick = {}, modifier = Modifier.weight(1f)) {
+                    Column(modifier = Modifier.weight(1f)
+                        .clickable{}
+                        .padding(vertical = 8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center) {
+                        Icon(
+                            painter = painterResource(R.drawable.analytics),
+                            contentDescription = null,
+                            tint = Color.Black,
+                        )
+
+                        Text("Analytics", fontSize = 12.sp)
+                    }
+
+
+                Column (modifier = Modifier.weight(1f).clickable{}.padding(vertical = 8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center){
                     Icon(
-                        imageVector = Icons.Default.Settings,
+                        painter = painterResource(R.drawable.settings),
                         contentDescription = null,
                         tint = Color.Black
                     )
+                    Text("Settings", fontSize = 12.sp)
                 }
             }
         }
@@ -358,8 +382,8 @@ fun CategoryId(image: Int, color: Color, text: String, expense: String) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun showHome() {
-    HomeActivity()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun showHome() {
+//    HomeActivity(navController = NavController)
+//}
