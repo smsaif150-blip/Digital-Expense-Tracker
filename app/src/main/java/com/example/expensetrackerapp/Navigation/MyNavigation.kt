@@ -10,11 +10,10 @@ import com.example.expensetrackerapp.Activites.HomeActivity
 import com.example.expensetrackerapp.Activites.LoginActivity
 import com.example.expensetrackerapp.Activites.SignUpActivity
 import com.example.expensetrackerapp.Activites.splashActivity
+import com.example.expensetrackerapp.viewmodel.AddExpenseViewmodel
 import com.example.expensetrackerapp.viewmodel.LoginViewmodel
 import com.example.expensetrackerapp.viewmodel.SignUpViewmodel
-import com.google.firebase.auth.FirebaseAuth
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+
 
 @Composable
 fun MyNavigation()
@@ -22,6 +21,7 @@ fun MyNavigation()
     val navController = rememberNavController()
     val signUpViewmodel: SignUpViewmodel = viewModel()
     val loginViewmodel: LoginViewmodel = viewModel()
+    val addExpenseViewmodel: AddExpenseViewmodel = viewModel()
     NavHost(navController = navController, startDestination = "splash")
     {
         composable("splash")
@@ -61,7 +61,7 @@ fun MyNavigation()
         }
         composable("addExpense")
         {
-            AddExpenseScreen(navController)
+            AddExpenseScreen(navController,addExpenseViewmodel)
         }
     }
 }

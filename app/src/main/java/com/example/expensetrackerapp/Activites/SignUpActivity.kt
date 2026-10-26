@@ -37,15 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.expensetrackerapp.model.User
 import com.example.expensetrackerapp.ui.theme.Blue
-import com.example.expensetrackerapp.ui.theme.ExpenseTrackerAppTheme
 import com.example.expensetrackerapp.ui.theme.Light_gray
 import com.example.expensetrackerapp.utils.Resource
 import com.example.expensetrackerapp.viewmodel.SignUpViewmodel

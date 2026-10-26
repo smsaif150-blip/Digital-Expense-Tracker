@@ -1,5 +1,6 @@
 package com.example.expensetrackerapp.Activites
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,12 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
@@ -30,16 +34,19 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.expensetrackerapp.R
 import com.example.expensetrackerapp.ui.theme.Blue_tined_white
 import com.example.expensetrackerapp.ui.theme.Gray_icon
@@ -49,11 +56,24 @@ import com.example.expensetrackerapp.viewmodel.AddExpenseViewmodel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddExpenseScreen(navController: NavController)
+fun AddExpenseScreen(navController: NavController,viewmodel: AddExpenseViewmodel)
 {
-    val viewmodel: AddExpenseViewmodel = viewModel()
 
     val datePickerState = rememberDatePickerState()
+
+    val titleError by viewmodel.titleError.collectAsState()
+    val amountError by viewmodel.amountError.collectAsState()
+    val categoryError by viewmodel.categoryError.collectAsState()
+    val dateError by viewmodel.dateError.collectAsState()
+    val context = LocalContext.current
+    val loading = viewmodel.isLoading
+
+    LaunchedEffect(key1 = true) {
+        viewmodel.firestoreMessage.collect { message->
+            Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -85,16 +105,27 @@ fun AddExpenseScreen(navController: NavController)
                 onValueChange = {
                     viewmodel.onTitleChange(it)
                 },
-                label = {Text("Title(e.g Lunch)", fontSize = 20.sp, color = Gray_icon)},
-
+                placeholder = {Text("Title(e.g Lunch)", color = Gray_icon)},
+                supportingText = {
+                    if (titleError!=null)
+                    Text(titleError.toString(), color = Color.Red)
+                }
                 )
+
+            Spacer(modifier = Modifier.padding(vertical = 4.dp))
 
             OutlinedTextField(value = viewmodel.amount,
                 onValueChange = {
                     viewmodel.onAmountChange(it)
                 },
-                label = {Text("Amount(e.g 50)", fontSize = 20.sp, color = Gray_icon)},
-
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                placeholder = {Text("Amount(e.g 50)", color = Gray_icon)},
+                supportingText = {
+                    if (amountError!=null)
+                    {
+                        Text(amountError.toString(), color = Color.Red)
+                    }
+                }
                 )
 
             Spacer(modifier = Modifier.padding(top = 8.dp))
@@ -102,13 +133,19 @@ fun AddExpenseScreen(navController: NavController)
             ExposedDropdownMenuBox(expanded = viewmodel.expanded,
                 onExpandedChange = {viewmodel.toggleDropdown()}) {
 
-
                 OutlinedTextField(value = viewmodel.selectedOptionText,
                     onValueChange = {},
                     readOnly = true,
                     modifier = Modifier.menuAnchor(),
+                    label = {Text("Select category")},
                     trailingIcon = {
                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewmodel.expanded)
+                    },
+                    supportingText = {
+                        if (categoryError!=null)
+                        {
+                            Text(categoryError.toString(), color = Color.Red)
+                        }
                     })
 
                 ExposedDropdownMenu(expanded = viewmodel.expanded,
@@ -118,6 +155,7 @@ fun AddExpenseScreen(navController: NavController)
                             text = {Text(option)},
                             onClick = {
                                 viewmodel.selectedOptionText = option
+                                viewmodel.onCategoryChange()
                                 viewmodel.expanded = false
                             }
                         )
@@ -159,6 +197,12 @@ fun AddExpenseScreen(navController: NavController)
                         modifier = Modifier.clickable{
                             viewmodel.showDatePicker = true
                         })
+                },
+                supportingText = {
+                    if (dateError!=null)
+                    {
+                        Text(dateError.toString(), color = Color.Red)
+                    }
                 }
             )
 
@@ -169,15 +213,28 @@ fun AddExpenseScreen(navController: NavController)
                 },
                 modifier = Modifier.height(120.dp).padding(top = 8.dp),
                 placeholder = {
-                    Text("Note (Optional)", color = Gray_icon, fontSize = 20.sp)
+                    Text("Note (Optional)", color = Gray_icon,)
                 }
                 )
 
-            Button(onClick = {}, modifier = Modifier.fillMaxWidth().padding(32.dp),
+            Button(onClick = {
+                viewmodel.saveButton(navController)
+            }, modifier = Modifier.fillMaxWidth().padding(32.dp),
                colors = ButtonDefaults.buttonColors(Primary_blue),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text("Save", fontSize = 20.sp, color = Pure_white)
+
+                if (loading)
+                {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp)
+                }else
+                {
+                    Text("Save", color = Pure_white)
+                }
+
+
             }
         }
     }
@@ -187,10 +244,10 @@ fun AddExpenseScreen(navController: NavController)
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun showAddExScreen()
-{
-    val navController = rememberNavController()
-    AddExpenseScreen(navController)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun showAddExScreen()
+//{
+//    val navController = rememberNavController()
+//    AddExpenseScreen(navController)
+//}
