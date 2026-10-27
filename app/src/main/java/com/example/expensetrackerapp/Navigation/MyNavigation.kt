@@ -11,6 +11,7 @@ import com.example.expensetrackerapp.Activites.LoginActivity
 import com.example.expensetrackerapp.Activites.SignUpActivity
 import com.example.expensetrackerapp.Activites.splashActivity
 import com.example.expensetrackerapp.viewmodel.AddExpenseViewmodel
+import com.example.expensetrackerapp.viewmodel.HomeViewmodel
 import com.example.expensetrackerapp.viewmodel.LoginViewmodel
 import com.example.expensetrackerapp.viewmodel.SignUpViewmodel
 
@@ -22,6 +23,7 @@ fun MyNavigation()
     val signUpViewmodel: SignUpViewmodel = viewModel()
     val loginViewmodel: LoginViewmodel = viewModel()
     val addExpenseViewmodel: AddExpenseViewmodel = viewModel()
+    val homeViewmodel: HomeViewmodel = viewModel()
     NavHost(navController = navController, startDestination = "splash")
     {
         composable("splash")
@@ -57,7 +59,7 @@ fun MyNavigation()
         }
         composable("home")
         {
-            HomeActivity(navController)
+            HomeActivity(navController,homeViewmodel)
         }
         composable("addExpense")
         {

@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.Scanner
 import java.util.UUID
 import javax.inject.Inject
 
@@ -117,6 +118,7 @@ class AddExpenseViewmodel @Inject constructor(private val auth: FirebaseAuth,
                 }
             }
     }
+
 
     fun onTitleChange(newText: String)
     {

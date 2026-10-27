@@ -22,18 +22,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,31 +43,56 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.expensetrackerapp.R
-import com.example.expensetrackerapp.repository.DummyData
+import com.example.expensetrackerapp.model.CategoryDesign
+import com.example.expensetrackerapp.model.Expenses
 import com.example.expensetrackerapp.ui.theme.Bills_green
 import com.example.expensetrackerapp.ui.theme.Blue_tined_white
 import com.example.expensetrackerapp.ui.theme.Deep_blue
 import com.example.expensetrackerapp.ui.theme.Food_orange
 import com.example.expensetrackerapp.ui.theme.Gray_icon
 import com.example.expensetrackerapp.ui.theme.Health_red
-import com.example.expensetrackerapp.ui.theme.Light_blue
 import com.example.expensetrackerapp.ui.theme.Navy_blue
+import com.example.expensetrackerapp.ui.theme.Other_gray
 import com.example.expensetrackerapp.ui.theme.Primary_blue
 import com.example.expensetrackerapp.ui.theme.Pure_white
 import com.example.expensetrackerapp.ui.theme.Shopping_purple
 import com.example.expensetrackerapp.ui.theme.Travel_blue
-import java.util.UUID
-import kotlin.math.exp
+import com.example.expensetrackerapp.utils.HomeState
+import com.example.expensetrackerapp.viewmodel.HomeViewmodel
 
 @Composable
-fun HomeActivity(navController: NavController) {
+fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
+    val homeState by viewmodel.homeState.collectAsState()
+    var loading by remember {
+        mutableStateOf(false)
+    }
 
-    val Expenses = DummyData()
+    var expenseList by remember {
+        mutableStateOf(emptyList<Expenses>())
+    }
+    LaunchedEffect(homeState) {
+
+        when(val state = homeState)
+        {
+            is HomeState.HomeLoading -> loading = true
+            is HomeState.HomeSuccess -> {
+                 loading = false
+                 expenseList = state.data
+                android.util.Log.d("HOME_DATA", "Fetched: ${state.data.size}")
+            }
+            is HomeState.HomeFailure ->{
+            //  val errorMessage =  (homeState as HomeState.HomeFailure).message
+                loading = false
+                android.util.Log.e("HOME_DATA", state.message)
+            }
+        }
+
+    }
+
 
     Scaffold(
         bottomBar = {
@@ -307,7 +334,8 @@ fun HomeActivity(navController: NavController) {
 
                 }
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(Expenses) { expense ->
+                    items(expenseList) { expense ->
+                        val myDesign = design(expense)
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -318,15 +346,15 @@ fun HomeActivity(navController: NavController) {
                                 modifier = Modifier
                                     .size(width = 48.dp, height = 48.dp)
                                     .background(
-                                        color = expense.color.copy(alpha = 0.2f),
+                                        color = myDesign.color.copy(alpha = 0.2f)  ,
                                         CircleShape
                                     ),
                                 contentAlignment = Alignment.Center
                             )
                             {
                                 Icon(
-                                    painter = painterResource(expense.image),
-                                    contentDescription = null, tint = expense.color
+                                    painter = painterResource(myDesign.image),
+                                    contentDescription = null, tint = myDesign.color
                                 )
                             }
                             Spacer(modifier = Modifier.padding(horizontal = 8.dp))
@@ -340,7 +368,7 @@ fun HomeActivity(navController: NavController) {
                                 }
                             }
                             Spacer(modifier = Modifier.weight(1f))
-                            Text("৳ "+expense.expense)
+                            Text("৳ "+expense.amount)
                         }
                     }
                 }
@@ -379,6 +407,35 @@ fun CategoryId(image: Int, color: Color, text: String, expense: String) {
         Text(text, color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 12.sp)
         Spacer(modifier = Modifier.height(3.dp))
         Text("৳" + expense, color = Color.Black, fontSize = 10.sp)
+    }
+}
+//val options:List<String> = listOf("Food","Travel","Shopping","Bills","Health","Other")
+
+
+
+
+fun design(expenses: Expenses): CategoryDesign
+{
+    when(expenses.category)
+    {
+        "Food" ->{
+            return CategoryDesign(Food_orange, R.drawable.food)
+        }
+        "Travel" ->{
+            return CategoryDesign(Travel_blue,R.drawable.travel)
+        }
+        "Shopping" ->{
+            return CategoryDesign(Shopping_purple,R.drawable.shopping)
+        }
+        "Bills" ->{
+            return CategoryDesign(Bills_green,R.drawable.bills)
+        }
+        "Health" ->{
+            return CategoryDesign(Health_red,R.drawable.health)
+        }
+        else -> {
+            return CategoryDesign(Other_gray, R.drawable.other)
+        }
     }
 }
 
