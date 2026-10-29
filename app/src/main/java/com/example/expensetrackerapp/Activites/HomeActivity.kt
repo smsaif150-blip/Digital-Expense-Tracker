@@ -25,14 +25,17 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -63,10 +66,12 @@ import com.example.expensetrackerapp.ui.theme.Shopping_purple
 import com.example.expensetrackerapp.ui.theme.Travel_blue
 import com.example.expensetrackerapp.utils.HomeState
 import com.example.expensetrackerapp.viewmodel.HomeViewmodel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
     val homeState by viewmodel.homeState.collectAsState()
+    val userName by viewmodel.userName.collectAsState()
     var loading by remember {
         mutableStateOf(false)
     }
@@ -74,6 +79,7 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
     var expenseList by remember {
         mutableStateOf(emptyList<Expenses>())
     }
+
     LaunchedEffect(homeState) {
 
         when(val state = homeState)
@@ -91,6 +97,21 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
             }
         }
 
+    }
+
+    val totalAmount = expenseList.sumOf {
+        it.amount.toIntOrNull()?:0
+    }
+
+
+    fun categoryExpense(expenseList: List<Expenses>,category: String): Int
+    {
+       return expenseList.filter {
+            it.category == category
+        }
+            .sumOf {
+                it.amount.toIntOrNull()?:0
+            }
     }
 
 
@@ -194,7 +215,7 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                "Saif",
+                                userName,
                                 fontSize = 28.sp,
                                 color = Color.White,
                                 fontWeight = FontWeight.Bold
@@ -248,7 +269,7 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
                             Text("Total Expense", color = Color.White, fontSize = 12.sp)
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                "৳ 12,450",
+                                "৳ $totalAmount",
                                 color = Color.White,
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold
@@ -304,12 +325,12 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             )
             {
-                CategoryId(R.drawable.food, Food_orange, "Food", "3240")
-                CategoryId(R.drawable.travel, Travel_blue, "Travel", "2800")
-                CategoryId(R.drawable.shopping, Shopping_purple, "Shopping", "1950")
-                CategoryId(R.drawable.bills, Bills_green, "Bills", "2420")
-                CategoryId(R.drawable.health, Health_red, "Health", "1200")
-                CategoryId(R.drawable.other, Gray_icon, "Other", "840")
+                CategoryId(R.drawable.food, Food_orange, "Food", categoryExpense(expenseList,"Food").toString())
+                CategoryId(R.drawable.travel, Travel_blue, "Travel", categoryExpense(expenseList,"Travel").toString())
+                CategoryId(R.drawable.shopping, Shopping_purple, "Shopping", categoryExpense(expenseList,"Shopping").toString())
+                CategoryId(R.drawable.bills, Bills_green, "Bills", categoryExpense(expenseList,"Bills").toString())
+                CategoryId(R.drawable.health, Health_red, "Health", categoryExpense(expenseList,"Health").toString())
+                CategoryId(R.drawable.other, Gray_icon, "Other", categoryExpense(expenseList,"Other").toString())
             }
 
 
@@ -330,7 +351,6 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
                 ) {
                     Text("Recent Expenses", fontWeight = FontWeight.Bold, color = Color.Black)
                     Spacer(modifier = Modifier.weight(1f))
-                    Text("View All >", color = Primary_blue)
 
                 }
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -370,6 +390,7 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
                             Spacer(modifier = Modifier.weight(1f))
                             Text("৳ "+expense.amount)
                         }
+                        Divider(modifier = Modifier.fillMaxWidth().padding(start = 70.dp, end = 48.dp, top = 2.dp), thickness = 1.dp, color = Gray_icon,)
                     }
                 }
 
@@ -395,11 +416,13 @@ fun CategoryId(image: Int, color: Color, text: String, expense: String) {
                     ), contentAlignment = Alignment.Center
             )
             {
-                Icon(
-                    painter = painterResource(image),
-                    contentDescription = null,
-                    tint = color // এখানে সরাসরি tint ব্যবহার করা যায়
-                )
+                IconButton(onClick = {})
+                {
+                    Icon(painter = painterResource(image),
+                        contentDescription = null,
+                        tint = color
+                        )
+                }
 
             }
         }
