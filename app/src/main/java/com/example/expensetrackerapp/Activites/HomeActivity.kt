@@ -1,9 +1,11 @@
 package com.example.expensetrackerapp.Activites
 
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -68,6 +70,7 @@ import com.example.expensetrackerapp.utils.HomeState
 import com.example.expensetrackerapp.viewmodel.HomeViewmodel
 import com.google.firebase.auth.FirebaseAuth
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
     val homeState by viewmodel.homeState.collectAsState()
@@ -101,17 +104,6 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
 
     val totalAmount = expenseList.sumOf {
         it.amount.toIntOrNull()?:0
-    }
-
-
-    fun categoryExpense(expenseList: List<Expenses>,category: String): Int
-    {
-       return expenseList.filter {
-            it.category == category
-        }
-            .sumOf {
-                it.amount.toIntOrNull()?:0
-            }
     }
 
 
@@ -434,6 +426,15 @@ fun CategoryId(image: Int, color: Color, text: String, expense: String) {
 }
 //val options:List<String> = listOf("Food","Travel","Shopping","Bills","Health","Other")
 
+fun categoryExpense(expenseList: List<Expenses>,category: String): Int
+{
+    return expenseList.filter {
+        it.category == category
+    }
+        .sumOf {
+            it.amount.toIntOrNull()?:0
+        }
+}
 
 
 
