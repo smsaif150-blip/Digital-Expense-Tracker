@@ -6,6 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.expensetrackerapp.Activites.AddExpenseScreen
+import com.example.expensetrackerapp.Activites.AnalyticsScreen
+import com.example.expensetrackerapp.Activites.ExpenseScreen
 import com.example.expensetrackerapp.Activites.HomeActivity
 import com.example.expensetrackerapp.Activites.LoginActivity
 import com.example.expensetrackerapp.Activites.SignUpActivity
@@ -64,6 +66,14 @@ fun MyNavigation()
         composable("addExpense")
         {
             AddExpenseScreen(navController,addExpenseViewmodel)
+        }
+        composable("expense")
+        {
+            ExpenseScreen()
+        }
+        composable("analytics")
+        {
+            AnalyticsScreen()
         }
     }
 }
