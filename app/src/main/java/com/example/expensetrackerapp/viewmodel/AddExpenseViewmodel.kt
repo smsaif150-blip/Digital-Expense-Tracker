@@ -7,8 +7,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.expensetrackerapp.model.Expenses
+import com.example.expensetrackerapp.utils.Collections.BILLS
+import com.example.expensetrackerapp.utils.Collections.FOOD
+import com.example.expensetrackerapp.utils.Collections.HEALTH
+import com.example.expensetrackerapp.utils.Collections.OTHER
+import com.example.expensetrackerapp.utils.Collections.SHOPPING
+import com.example.expensetrackerapp.utils.Collections.TRAVEL
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +25,6 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.Scanner
 import java.util.UUID
 import javax.inject.Inject
 
@@ -29,7 +33,7 @@ class AddExpenseViewmodel @Inject constructor(private val auth: FirebaseAuth,
                                              private val db: FirebaseFirestore): ViewModel() {
     var isLoading by mutableStateOf(false)
     var expanded by mutableStateOf(false)
-    val options:List<String> = listOf("Food","Travel","Shopping","Bills","Health","Other")
+    val options:List<String> = listOf(FOOD,TRAVEL,SHOPPING,BILLS,HEALTH,OTHER)
 
 
 

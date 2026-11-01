@@ -84,9 +84,7 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
         mutableStateOf(emptyList<Expenses>())
     }
 
-    val selectedIcon = remember {
-        mutableStateOf(R.drawable.home)
-    }
+
 
     LaunchedEffect(homeState) {
 
@@ -113,117 +111,6 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
 
 
     Scaffold(
-        bottomBar = {
-            BottomAppBar(
-                containerColor = Color.White,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-            ) {
-
-                Column (modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center){
-
-                    IconButton(onClick = {selectedIcon.value = R.drawable.home},
-                        modifier = Modifier.size(100.dp)) {
-
-                        Column {
-                            Icon(
-                                painter = painterResource(R.drawable.home),
-                                contentDescription = null,
-                                tint =
-                                    if (selectedIcon.value == R.drawable.home)
-                                    {
-                                        Primary_blue
-                                    }else{
-                                        Color.Black
-                                    }
-                            )
-
-                            Text("Home", fontSize = 12.sp)
-                        }
-                    }
-
-
-                }
-
-                Column (modifier = Modifier.weight(1f).clickable{
-                    navController.navigate("expense")
-                    selectedIcon.value = R.drawable.expense}.padding(vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center){
-                    Icon(
-                        painter = painterResource(R.drawable.expense),
-                        contentDescription = null,
-                        tint =
-                            if (selectedIcon.value==R.drawable.expense)
-                            {
-                                Primary_blue
-                            }else{
-                                Color.Black
-                            }
-                    )
-                    Text("Expense", fontSize = 12.sp)
-                }
-
-                Column(modifier = Modifier.weight(1f).padding(vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center) {
-
-                    FloatingActionButton(onClick = {
-                        navController.navigate("addExpense")
-                    },
-                        shape = CircleShape,
-                        containerColor = Primary_blue) {
-                        Icon(imageVector = Icons.Default.Add,null, tint = Pure_white)
-                    }
-
-                }
-
-
-                    Column(modifier = Modifier.weight(1f)
-                        .clickable{
-                            navController.navigate("analytics")
-                            selectedIcon.value = R.drawable.analytics}
-                        .padding(vertical = 8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center) {
-                        Icon(
-                            painter = painterResource(R.drawable.analytics),
-                            contentDescription = null,
-                            tint =
-                                if (selectedIcon.value==R.drawable.analytics)
-                                {
-                                    Primary_blue
-                                }else
-                                {
-                                    Color.Black
-                                }
-                        )
-
-                        Text("Analytics", fontSize = 12.sp)
-                    }
-
-
-                Column (modifier = Modifier.weight(1f).clickable{selectedIcon.value = R.drawable.settings}.padding(vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center){
-                    Icon(
-                        painter = painterResource(R.drawable.settings),
-                        contentDescription = null,
-                        tint =
-                            if (selectedIcon.value==R.drawable.settings)
-                            {
-                                Primary_blue
-                            }else{
-                                Color.Black
-                            }
-                    )
-                    Text("Settings", fontSize = 12.sp)
-                }
-            }
-        }
     ) { innerPadding ->
 
         Column(modifier = Modifier

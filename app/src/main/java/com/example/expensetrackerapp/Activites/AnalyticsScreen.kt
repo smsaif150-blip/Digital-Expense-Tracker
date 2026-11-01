@@ -1,21 +1,176 @@
 package com.example.expensetrackerapp.Activites
-
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.expensetrackerapp.R
+import com.example.expensetrackerapp.model.ChartData
+import com.example.expensetrackerapp.ui.theme.Bills_green
 import com.example.expensetrackerapp.ui.theme.Blue_tined_white
+import com.example.expensetrackerapp.ui.theme.Food_orange
+import com.example.expensetrackerapp.ui.theme.Health_red
+import com.example.expensetrackerapp.ui.theme.Other_gray
+import com.example.expensetrackerapp.ui.theme.Primary_blue
+import com.example.expensetrackerapp.ui.theme.Pure_white
+import com.example.expensetrackerapp.ui.theme.Shopping_purple
+import com.example.expensetrackerapp.ui.theme.Travel_blue
+import com.example.expensetrackerapp.utils.Collections.BILLS
+import com.example.expensetrackerapp.utils.Collections.FOOD
+import com.example.expensetrackerapp.utils.Collections.HEALTH
+import com.example.expensetrackerapp.utils.Collections.OTHER
+import com.example.expensetrackerapp.utils.Collections.SHOPPING
+import com.example.expensetrackerapp.utils.Collections.TRAVEL
+import com.example.expensetrackerapp.utils.HomeState
+import com.example.expensetrackerapp.viewmodel.HomeViewmodel
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.sp
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AnalyticsScreen(navController: NavController,homeViewmodel: HomeViewmodel) {
+
+    val homeState by homeViewmodel.homeState.collectAsState()
+
+    val expenseList = (homeState as? HomeState.HomeSuccess)?.data?:emptyList()
+
+    val categories = listOf(
+        FOOD to Food_orange,
+        TRAVEL to Travel_blue,
+        SHOPPING to Shopping_purple,
+        BILLS to Bills_green,
+        HEALTH to Health_red,
+        OTHER to Other_gray,
+    )
+
+    val chartData = categories.map { (name,color)->
+
+        val total = expenseList.filter {
+            it.category == name
+        }
+            .sumOf {
+                it.amount.toIntOrNull()?:0
+            }
+
+        ChartData(
+            name = name,
+            amount = total,
+            color = color
+        )
+    }
+
+    Scaffold(
+        topBar = {
+          TopAppBar(
+              title = {
+                  Text("Analytics", fontWeight = FontWeight.Bold, color = Pure_white)
+              },
+              navigationIcon = {
+                  IconButton(onClick = {
+                      navController.popBackStack()
+                  }) {
+                      Icon(painter = painterResource(R.drawable.outline_arrow_back_24), contentDescription = "Back button", tint = Pure_white)
+                  }
+              },
+              colors = TopAppBarDefaults.topAppBarColors(Primary_blue)
+          )
+        }
+    ) {innerpadding->
+
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(innerpadding)
+            .background(color = Blue_tined_white)) {
+
+
+            Row (modifier = Modifier
+                .weight(1f)
+                .padding(6.dp)){
+                Text("Category-wise Expense")
+
+                DonutChart(chartData)
+            }
+            Row (modifier = Modifier
+                .weight(1f)
+                .padding(6.dp)){
+                Text("Monthly Expense Trend")
+            }
+            Row (modifier = Modifier
+                .weight(1f)
+                .padding(6.dp)){
+                Text( "Weekly Expense Trend")
+            }
+
+        }
+
+    }
+
+}
 
 @Composable
-fun AnalyticsScreen() {
-    Column(modifier = Modifier.fillMaxSize().background(color = Blue_tined_white),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+fun DonutChart(data: List<ChartData>)
+{
 
-        Text("Analytics")
+
+    Box(modifier = Modifier.size(200.dp))
+    {
+        val total = data.sumOf { it.amount }
+        Canvas(modifier = Modifier.fillMaxSize()) {
+
+            var startAngle = -90f
+
+            val strokeWidth = 28.dp.toPx()
+
+
+            data.forEach { item->
+
+                if (total>0)
+                {
+                    val sweepAngle = (item.amount/total)*360f
+
+
+                    drawArc(
+                        color = item.color,
+                        startAngle = startAngle,
+                        sweepAngle = sweepAngle,
+                        useCenter =false,
+                        topLeft = Offset(strokeWidth/2,strokeWidth/2),
+                        size = Size(size.width-strokeWidth,size.height-strokeWidth),
+                        style = Stroke(width = strokeWidth),
+                    )
+
+                    startAngle+=sweepAngle
+                }
+            }
+        }
+
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            Text(text = "৳ $total", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            Text("Total Expense", fontSize = 12.sp)
+        }
+
     }
 }
