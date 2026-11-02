@@ -36,6 +36,7 @@ import com.example.expensetrackerapp.Activites.AnalyticsScreen
 import com.example.expensetrackerapp.Activites.ExpenseScreen
 import com.example.expensetrackerapp.Activites.HomeActivity
 import com.example.expensetrackerapp.Activites.LoginActivity
+import com.example.expensetrackerapp.Activites.SettingsScreen
 import com.example.expensetrackerapp.Activites.SignUpActivity
 import com.example.expensetrackerapp.Activites.splashActivity
 import com.example.expensetrackerapp.R
@@ -65,7 +66,8 @@ fun MyNavigation()
             if (
                 currentRoute == "home" ||
                 currentRoute == "expense" ||
-                currentRoute == "analytics"
+                currentRoute == "analytics" ||
+                currentRoute == "settings"
             ) {
                 BottomAppBar(
                     containerColor = Color.White,
@@ -83,9 +85,7 @@ fun MyNavigation()
                         IconButton(
                             onClick = {
                                 navController.navigate("home")
-                                {
-                                }
-                                selectedIcon.value = R.drawable.home
+                               // selectedIcon.value = R.drawable.home
                             },
                             modifier = Modifier.size(100.dp)
                         ) {
@@ -95,7 +95,7 @@ fun MyNavigation()
                                     painter = painterResource(R.drawable.home),
                                     contentDescription = null,
                                     tint =
-                                        if (selectedIcon.value == R.drawable.home) {
+                                        if (currentRoute=="home") {
                                             Primary_blue
                                         } else {
                                             Color.Black
@@ -121,7 +121,7 @@ fun MyNavigation()
                             painter = painterResource(R.drawable.expense),
                             contentDescription = null,
                             tint =
-                                if (selectedIcon.value == R.drawable.expense) {
+                                if (currentRoute=="expense") {
                                     Primary_blue
                                 } else {
                                     Color.Black
@@ -153,7 +153,7 @@ fun MyNavigation()
                         modifier = Modifier.weight(1f)
                         .clickable {
                             navController.navigate("analytics")
-                            selectedIcon.value = R.drawable.analytics
+                          //  selectedIcon.value = R.drawable.analytics
                         }
                         .padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -162,7 +162,7 @@ fun MyNavigation()
                             painter = painterResource(R.drawable.analytics),
                             contentDescription = null,
                             tint =
-                                if (selectedIcon.value == R.drawable.analytics) {
+                                if (currentRoute=="analytics") {
                                     Primary_blue
                                 } else {
                                     Color.Black
@@ -175,7 +175,9 @@ fun MyNavigation()
 
                     Column(
                         modifier = Modifier.weight(1f)
-                            .clickable { selectedIcon.value = R.drawable.settings }
+                            .clickable {
+                                navController.navigate("settings")
+                            }
                             .padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
@@ -184,7 +186,7 @@ fun MyNavigation()
                             painter = painterResource(R.drawable.settings),
                             contentDescription = null,
                             tint =
-                                if (selectedIcon.value == R.drawable.settings) {
+                                if (currentRoute=="settings") {
                                     Primary_blue
                                 } else {
                                     Color.Black
@@ -244,6 +246,10 @@ fun MyNavigation()
             composable("analytics")
             {
                 AnalyticsScreen(navController,homeViewmodel)
+            }
+            composable("settings")
+            {
+                SettingsScreen(navController,homeViewmodel)
             }
         }
 

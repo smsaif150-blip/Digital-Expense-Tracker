@@ -45,6 +45,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -115,49 +117,54 @@ fun AnalyticsScreen(navController: NavController,homeViewmodel: HomeViewmodel) {
                 .weight(1f)
                 .padding(6.dp)){
 
-                Column() {
-                    Row {
-                        Image(painter = painterResource(R.drawable.chart), contentDescription = "chart", modifier = Modifier.size(24.dp))
-                        Spacer(modifier = Modifier.padding(horizontal = 2.dp))
-                        Text("Category-wise Expense", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    }
-                    Text("This month's spending by category", color = Color.Gray, fontSize = 12.sp, modifier = Modifier.padding(start = 26.dp))
-
-                    Row {
-
-                        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center) {
-                            DonutChart(chartData)
+                Card(
+                    modifier = Modifier.fillMaxSize().padding(8.dp),
+                    colors = CardDefaults.cardColors(Pure_white)
+                ) {
+                    Column() {
+                        Row {
+                            Image(painter = painterResource(R.drawable.chart), contentDescription = "chart", modifier = Modifier.size(24.dp))
+                            Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+                            Text("Category-wise Expense", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                         }
+                        Text("This month's spending by category", color = Color.Gray, fontSize = 12.sp, modifier = Modifier.padding(start = 26.dp))
 
-                        Column(modifier = Modifier.weight(1.3f)) {
-                            chartData.forEach { item->
-                                val grandTotal = chartData.sumOf {
-                                    it.amount
-                                }
-                                val percent = if (grandTotal>0)
-                                {
-                                    (item.amount.toFloat()/grandTotal)*100f
-                                }
-                                else{
-                                    0f
-                                }
-                                val result = "%.2f".format(percent)
-                                // val percent = (item.amount.toFloat()/total)*100f
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Box(modifier = Modifier.padding(end = 8.dp).size(10.dp).background(item.color,
-                                        CircleShape
-                                    ))
-                                    Text(item.name, fontSize = 12.sp, color = Color.Black, modifier = Modifier.weight(1f))
-                                    Text("৳${item.amount}", fontSize = 12.sp, color = Color.Black, modifier = Modifier.padding(start = 12.dp).weight(1f))
-                                    Text("$result%", fontSize = 12.sp, color = Color.Black, modifier = Modifier.weight(1f))
+                        Row {
+
+                            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center) {
+                                DonutChart(chartData)
+                            }
+
+                            Column(modifier = Modifier.weight(1.3f)) {
+                                chartData.forEach { item->
+                                    val grandTotal = chartData.sumOf {
+                                        it.amount
+                                    }
+                                    val percent = if (grandTotal>0)
+                                    {
+                                        (item.amount.toFloat()/grandTotal)*100f
+                                    }
+                                    else{
+                                        0f
+                                    }
+                                    val result = "%.2f".format(percent)
+                                    // val percent = (item.amount.toFloat()/total)*100f
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Box(modifier = Modifier.padding(end = 8.dp).size(10.dp).background(item.color,
+                                            CircleShape
+                                        ))
+                                        Text(item.name, fontSize = 12.sp, color = Color.Black, modifier = Modifier.weight(1f))
+                                        Text("৳${item.amount}", fontSize = 12.sp, color = Color.Black, modifier = Modifier.padding(start = 12.dp).weight(1f))
+                                        Text("$result%", fontSize = 12.sp, color = Color.Black, modifier = Modifier.weight(1f))
+                                    }
                                 }
                             }
                         }
                     }
-
-
                 }
+
+
             }
             Row (modifier = Modifier
                 .weight(1f)
