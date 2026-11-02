@@ -41,11 +41,17 @@ import com.example.expensetrackerapp.utils.Collections.TRAVEL
 import com.example.expensetrackerapp.utils.HomeState
 import com.example.expensetrackerapp.viewmodel.HomeViewmodel
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.sp
+import com.example.expensetrackerapp.ui.theme.Gray_icon
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +73,7 @@ fun AnalyticsScreen(navController: NavController,homeViewmodel: HomeViewmodel) {
 
     val chartData = categories.map { (name,color)->
 
-        val total = expenseList.filter {
+       val   total = expenseList.filter {
             it.category == name
         }
             .sumOf {
@@ -108,9 +114,50 @@ fun AnalyticsScreen(navController: NavController,homeViewmodel: HomeViewmodel) {
             Row (modifier = Modifier
                 .weight(1f)
                 .padding(6.dp)){
-                Text("Category-wise Expense")
 
-                DonutChart(chartData)
+                Column() {
+                    Row {
+                        Image(painter = painterResource(R.drawable.chart), contentDescription = "chart", modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+                        Text("Category-wise Expense", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    }
+                    Text("This month's spending by category", color = Color.Gray, fontSize = 12.sp, modifier = Modifier.padding(start = 26.dp))
+
+                    Row {
+
+                        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center) {
+                            DonutChart(chartData)
+                        }
+
+                        Column(modifier = Modifier.weight(1.3f)) {
+                            chartData.forEach { item->
+                                val grandTotal = chartData.sumOf {
+                                    it.amount
+                                }
+                                val percent = if (grandTotal>0)
+                                {
+                                    (item.amount.toFloat()/grandTotal)*100f
+                                }
+                                else{
+                                    0f
+                                }
+                                val result = "%.2f".format(percent)
+                                // val percent = (item.amount.toFloat()/total)*100f
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Box(modifier = Modifier.padding(end = 8.dp).size(10.dp).background(item.color,
+                                        CircleShape
+                                    ))
+                                    Text(item.name, fontSize = 12.sp, color = Color.Black, modifier = Modifier.weight(1f))
+                                    Text("৳${item.amount}", fontSize = 12.sp, color = Color.Black, modifier = Modifier.padding(start = 12.dp).weight(1f))
+                                    Text("$result%", fontSize = 12.sp, color = Color.Black, modifier = Modifier.weight(1f))
+                                }
+                            }
+                        }
+                    }
+
+
+                }
             }
             Row (modifier = Modifier
                 .weight(1f)
@@ -124,17 +171,14 @@ fun AnalyticsScreen(navController: NavController,homeViewmodel: HomeViewmodel) {
             }
 
         }
-
     }
-
 }
 
 @Composable
 fun DonutChart(data: List<ChartData>)
 {
-
-
-    Box(modifier = Modifier.size(200.dp))
+    Box(modifier = Modifier.size(140.dp),
+        contentAlignment = Alignment.Center)
     {
         val total = data.sumOf { it.amount }
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -148,13 +192,14 @@ fun DonutChart(data: List<ChartData>)
 
                 if (total>0)
                 {
-                    val sweepAngle = (item.amount/total)*360f
+                    val sweepAngle = (item.amount.toFloat()/total)*360f
+                    val gapAngle = 0.5f
 
 
                     drawArc(
                         color = item.color,
                         startAngle = startAngle,
-                        sweepAngle = sweepAngle,
+                        sweepAngle = (sweepAngle-gapAngle).coerceAtLeast(0f),
                         useCenter =false,
                         topLeft = Offset(strokeWidth/2,strokeWidth/2),
                         size = Size(size.width-strokeWidth,size.height-strokeWidth),
@@ -168,8 +213,8 @@ fun DonutChart(data: List<ChartData>)
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            Text(text = "৳ $total", fontSize = 22.sp, fontWeight = FontWeight.Bold)
-            Text("Total Expense", fontSize = 12.sp)
+            Text(text = "৳ $total", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text("Total", fontSize = 12.sp)
         }
 
     }
