@@ -31,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.savedstate.savedState
 import com.example.expensetrackerapp.Activites.AddExpenseScreen
 import com.example.expensetrackerapp.Activites.AnalyticsScreen
 import com.example.expensetrackerapp.Activites.ExpenseScreen
@@ -85,6 +86,14 @@ fun MyNavigation()
                         IconButton(
                             onClick = {
                                 navController.navigate("home")
+                                {
+                                    popUpTo("home")
+                                    {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                                // selectedIcon.value = R.drawable.home
                             },
                             modifier = Modifier.size(100.dp)
@@ -112,7 +121,16 @@ fun MyNavigation()
                     Column(
                         modifier = Modifier.weight(1f).clickable {
                             navController.navigate("expense")
-                            selectedIcon.value = R.drawable.expense
+                            {
+                                popUpTo("home")
+                                {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+
+                            }
+                           // selectedIcon.value = R.drawable.expense
                         }.padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
@@ -153,6 +171,14 @@ fun MyNavigation()
                         modifier = Modifier.weight(1f)
                         .clickable {
                             navController.navigate("analytics")
+                            {
+                                popUpTo("home")
+                                {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                           //  selectedIcon.value = R.drawable.analytics
                         }
                         .padding(vertical = 8.dp),
@@ -177,6 +203,14 @@ fun MyNavigation()
                         modifier = Modifier.weight(1f)
                             .clickable {
                                 navController.navigate("settings")
+                                {
+                                    popUpTo("home")
+                                    {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                             .padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
