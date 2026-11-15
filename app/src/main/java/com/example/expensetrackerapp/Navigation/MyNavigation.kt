@@ -1,5 +1,7 @@
 package com.example.expensetrackerapp.Navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -232,7 +234,9 @@ fun MyNavigation()
             }
         }
     ) {innerpadding->
-        NavHost(navController = navController, startDestination = "splash")
+        NavHost(navController = navController, startDestination = "splash",
+            enterTransition = { EnterTransition.None}, exitTransition = { ExitTransition.None},
+            modifier = Modifier.padding(bottom = innerpadding.calculateBottomPadding()))
         {
             composable("splash")
             {

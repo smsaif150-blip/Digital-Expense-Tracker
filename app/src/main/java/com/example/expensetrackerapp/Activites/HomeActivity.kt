@@ -266,7 +266,7 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
-                    .height(260.dp),
+                    .weight(1f),
                 elevation = CardDefaults.cardElevation(1.dp),
                 colors = CardDefaults.cardColors(Pure_white)
             ) {
