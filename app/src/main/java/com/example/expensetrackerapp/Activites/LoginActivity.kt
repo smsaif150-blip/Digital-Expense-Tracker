@@ -1,6 +1,7 @@
 package com.example.expensetrackerapp.Activites
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -44,6 +46,14 @@ import com.example.expensetrackerapp.viewmodel.LoginViewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import com.example.expensetrackerapp.R
+import com.example.expensetrackerapp.ui.theme.Border_Color
+import com.example.expensetrackerapp.ui.theme.Focused_Border
+import com.example.expensetrackerapp.ui.theme.Input_Text
+import com.example.expensetrackerapp.ui.theme.Navy_blue
+import com.example.expensetrackerapp.ui.theme.Secondary_text
+import com.example.expensetrackerapp.ui.theme.TextField_Background
 import com.example.expensetrackerapp.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -115,62 +125,63 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
         .fillMaxSize()
         .background(color = Blue)){
 
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 120.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Login Account", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Bold)
-        }
+//        Column(modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(top = 120.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+//            Text("Login Account", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+//        }
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 200.dp)
-            .background(
-                color = Color.White,
-                RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-            ))
-        {
-            Column(modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(painter = painterResource(R.drawable.signup),null)
 
-                OutlinedTextField(value =email,
+
+        Column(modifier = Modifier.fillMaxSize().padding(top = 64.dp),
+               horizontalAlignment = Alignment.CenterHorizontally) {
+
+            Text("Welcome Back", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Navy_blue)
+            Spacer(modifier = Modifier.padding(top = 5.dp))
+            Text("start your journey to better\n   financial management", fontSize = 16.sp, color = Secondary_text)
+
+                    OutlinedTextField(value =email,
                     onValueChange = {
                         email = it
                         loginViewmodel.onEmailChange()
                     },
-                    modifier = Modifier.padding(top = 72.dp),
+                   modifier = Modifier.padding(top = 220.dp),
                     label = {
-                        Text("Email", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text("Email Address", fontSize = 16.sp, color = Input_Text)
                     },
                     leadingIcon = {
-                        Icon(imageVector = Icons.Default.Email, contentDescription = "Email")
+                        Icon(imageVector = Icons.Default.Email, contentDescription = "Email", tint = Blue)
                     },
                     shape = RoundedCornerShape(16.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Light_gray,
-                        unfocusedBorderColor = Light_gray
+                        focusedBorderColor = Focused_Border,
+                        unfocusedBorderColor = Border_Color,
+                        focusedContainerColor = TextField_Background,
+                        unfocusedContainerColor = TextField_Background
                     ),
                     supportingText = {
                         if (emailError!=null)
                         Text(emailError.toString(), color = MaterialTheme.colorScheme.error)
-                    }
+                    },
                 )
 
-                OutlinedTextField(value =password, onValueChange = {
+                    OutlinedTextField(value =password, onValueChange = {
                     password = it
                     loginViewmodel.onPasswordChange()
                 },
-                    modifier = Modifier.padding(top = 12.dp),
                     label = {
-                        Text("Password", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text("Password", fontSize = 16.sp, color = Input_Text)
                     },
                     leadingIcon = {
-                        Icon(imageVector = Icons.Default.Lock, contentDescription = "Email")
+                        Icon(imageVector = Icons.Default.Lock, contentDescription = "password", tint = Blue)
                     },
                     shape = RoundedCornerShape(16.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Light_gray,
-                        unfocusedBorderColor = Light_gray
+                        focusedBorderColor = Focused_Border,
+                        unfocusedBorderColor = Border_Color,
+                        focusedContainerColor = TextField_Background,
+                        unfocusedContainerColor = TextField_Background
                     ),
                     supportingText = {
                         if (passwordError != null)
@@ -180,8 +191,6 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
                     }
                 )
 
-
-                Spacer(modifier = Modifier.padding(10.dp))
                 TextButton(onClick = {
                     showResetPasswordDialog = true
                 }, modifier = Modifier.padding(start = 120.dp)) {
@@ -189,51 +198,46 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
                 }
 
 
+            Button(onClick = {
+                loginViewmodel.Login(email.trim(),password.trim())
+            },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .padding(start = 50.dp, end = 50.dp),
+                colors = ButtonDefaults.buttonColors(
+                    Blue
+                ),
+                shape = RoundedCornerShape(12.dp),
+                enabled = !isLoading
 
-
-
-                Button(onClick = {
-                    loginViewmodel.Login(email.trim(),password.trim())
-                },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                        .padding(start = 50.dp, end = 50.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        Blue
-                    ),
-                    shape = RoundedCornerShape(12.dp),
-                    enabled = !isLoading
-
-                ) {
-                    if (isLoading)
-                    {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = Color.White,
-                            strokeWidth = 2.dp
-                        )
-                    } else
-                    {
-                        Text("Log In", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                    }
-
+            ) {
+                if (isLoading)
+                {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+                } else
+                {
+                    Text("Log In", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Don't have any account?")
-                TextButton(onClick = {
-                    navController.navigate("SignUp")
-                    {
-                        popUpTo("LogIn")
-                        {
-                            inclusive = true
-                        }
-                    }
-                }) {
-                    Text("Sign Up", color =  Blue,fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                }
+            }
 
+            Spacer(modifier = Modifier.height(8.dp))
+            Text("Don't have any account?")
+            TextButton(onClick = {
+                navController.navigate("SignUp")
+                {
+                    popUpTo("LogIn")
+                    {
+                        inclusive = true
+                    }
+                }
+            }) {
+                Text("Sign Up", color =  Blue,fontSize = 24.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
