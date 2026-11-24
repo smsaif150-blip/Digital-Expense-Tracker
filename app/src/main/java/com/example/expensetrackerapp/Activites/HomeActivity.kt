@@ -84,7 +84,10 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
         mutableStateOf(emptyList<Expenses>())
     }
 
-
+    LaunchedEffect(Unit) {
+        viewmodel.fetchExpense()
+        viewmodel.getName()
+    }
 
     LaunchedEffect(homeState) {
 

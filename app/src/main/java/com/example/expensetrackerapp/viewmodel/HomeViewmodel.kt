@@ -20,10 +20,10 @@ class HomeViewmodel @Inject constructor(val repository: HomeRepository): ViewMod
     val userName: StateFlow<String> = _userName
     private var expenseListener: ListenerRegistration? = null
 
-    init {
-        fetchExpense()
-        getName()
-    }
+//    init {
+//        fetchExpense()
+//        getName()
+//    }
 
     fun fetchExpense()
     {

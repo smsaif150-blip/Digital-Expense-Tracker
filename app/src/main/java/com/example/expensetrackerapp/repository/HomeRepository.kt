@@ -29,7 +29,6 @@ class HomeRepository @Inject constructor(private val auth: FirebaseAuth,private 
                         onResult(HomeState.HomeFailure(
                             error.localizedMessage?: "There is a problem"
                         ))
-
                         return@addSnapshotListener
                     }
 
