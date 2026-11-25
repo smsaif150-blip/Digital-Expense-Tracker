@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -122,15 +123,7 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
 
 
     Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Blue)){
-
-//        Column(modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(top = 120.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-//            Text("Login Account", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Bold)
-//        }
-
+        .fillMaxSize()){
         Image(painter = painterResource(R.drawable.signup),null)
 
 
@@ -147,7 +140,7 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
                         loginViewmodel.onEmailChange()
                     },
                    modifier = Modifier.padding(top = 220.dp),
-                    label = {
+                    placeholder = {
                         Text("Email Address", fontSize = 16.sp, color = Input_Text)
                     },
                     leadingIcon = {
@@ -170,7 +163,7 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
                     password = it
                     loginViewmodel.onPasswordChange()
                 },
-                    label = {
+                    placeholder = {
                         Text("Password", fontSize = 16.sp, color = Input_Text)
                     },
                     leadingIcon = {
@@ -226,18 +219,21 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
 
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Don't have any account?")
-            TextButton(onClick = {
-                navController.navigate("SignUp")
-                {
-                    popUpTo("LogIn")
+            Spacer(modifier = Modifier.padding(top = 12.dp))
+            Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                Text("Don't have any account?", fontSize = 16.sp)
+                TextButton(onClick = {
+                    navController.navigate("SignUp")
                     {
-                        inclusive = true
+                        popUpTo("LogIn")
+                        {
+                            inclusive = true
+                        }
                     }
+                }) {
+                    Text("Sign Up", color =  Blue,fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
-            }) {
-                Text("Sign Up", color =  Blue,fontSize = 24.sp, fontWeight = FontWeight.Bold)
+
             }
         }
     }

@@ -1,10 +1,12 @@
 package com.example.expensetrackerapp.Activites
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,13 +38,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.expensetrackerapp.R
 import com.example.expensetrackerapp.model.User
 import com.example.expensetrackerapp.ui.theme.Blue
+import com.example.expensetrackerapp.ui.theme.Border_Color
+import com.example.expensetrackerapp.ui.theme.Deep_blue
+import com.example.expensetrackerapp.ui.theme.Focused_Border
+import com.example.expensetrackerapp.ui.theme.Input_Text
 import com.example.expensetrackerapp.ui.theme.Light_gray
+import com.example.expensetrackerapp.ui.theme.TextField_Background
 import com.example.expensetrackerapp.utils.Resource
 import com.example.expensetrackerapp.viewmodel.SignUpViewmodel
 
@@ -99,15 +108,15 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
     val user = User(name,email)
 
 
-    Box(modifier = Modifier.fillMaxSize().background(color = Blue)){
+    Box(modifier = Modifier.fillMaxSize()){
 
-        Column(modifier = Modifier.fillMaxWidth().padding(top = 120.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Create Account", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Bold)
-        }
+//        Column(modifier = Modifier.fillMaxWidth().padding(top = 120.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+//            Text("Create Account", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Bold)
+//        }
 
-      Box(modifier = Modifier.fillMaxSize().padding(top = 200.dp).background(color = Color.White,
-          RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-      ))
+        Image(painter = painterResource(R.drawable.signup),null)
+
+      Box(modifier = Modifier.fillMaxSize().padding(top = 300.dp))
       {
           Column(modifier = Modifier.fillMaxWidth(),
               verticalArrangement = Arrangement.Center,
@@ -120,15 +129,17 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
                   },
                   modifier = Modifier.padding(top = 72.dp),
                   placeholder = {
-                      Text("Name", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                      Text("Name",  fontSize = 16.sp, color = Input_Text)
                   },
                   leadingIcon = {
-                      Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Name")
+                      Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Name", tint = Blue)
                   },
                   shape = RoundedCornerShape(16.dp),
                   colors = OutlinedTextFieldDefaults.colors(
-                      focusedBorderColor = Light_gray,
-                      unfocusedBorderColor = Light_gray
+                      focusedBorderColor = Focused_Border,
+                      unfocusedBorderColor = Border_Color,
+                      focusedContainerColor = TextField_Background,
+                      unfocusedContainerColor = TextField_Background
                   ),
                   supportingText = {
                       if (nameError != null)
@@ -142,17 +153,18 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
                   email = it
                   signUpViewmodel.onEmailChange()
               },
-                 // modifier = Modifier.padding(top = 20.dp),
                   placeholder = {
-                      Text("Email", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                      Text("Email", fontSize = 16.sp, color = Input_Text)
                   },
                   leadingIcon = {
-                      Icon(imageVector = Icons.Default.Email, contentDescription = "Email")
+                      Icon(imageVector = Icons.Default.Email, contentDescription = "Email", tint = Blue)
                   },
                   shape = RoundedCornerShape(16.dp),
                   colors = OutlinedTextFieldDefaults.colors(
-                      focusedBorderColor = Light_gray,
-                      unfocusedBorderColor = Light_gray
+                      focusedBorderColor = Focused_Border,
+                      unfocusedBorderColor = Border_Color,
+                      focusedContainerColor = TextField_Background,
+                      unfocusedContainerColor = TextField_Background
                   ),
                   supportingText = {
                       if(emailError!=null)
@@ -169,15 +181,17 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
                   },
                  // modifier = Modifier.padding(top = 20.dp),
                   placeholder = {
-                      Text("Password", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                      Text("Password",  fontSize = 16.sp, color = Input_Text)
                   },
                   leadingIcon = {
-                      Icon(imageVector = Icons.Default.Lock, contentDescription = "password")
+                      Icon(imageVector = Icons.Default.Lock, contentDescription = "password", tint = Blue)
                   },
                   shape = RoundedCornerShape(16.dp),
                   colors = OutlinedTextFieldDefaults.colors(
-                      focusedBorderColor = Light_gray,
-                      unfocusedBorderColor = Light_gray
+                      focusedBorderColor = Focused_Border,
+                      unfocusedBorderColor = Border_Color,
+                      focusedContainerColor = TextField_Background,
+                      unfocusedContainerColor = TextField_Background
                   ),
                   supportingText = {
                       if (passwordError!=null)
@@ -187,23 +201,7 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
                   }
                   )
 
-              OutlinedTextField(value = SignUpConfirmPassword, onValueChange = {SignUpConfirmPassword = it},
-               //   modifier = Modifier.padding(top = 20.dp),
-                  placeholder = {
-                      Text("Confirm Password", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                  },
-                  leadingIcon = {
-                      Icon(imageVector = Icons.Default.Lock, contentDescription = "confirm password")
-                  },
-                  shape = RoundedCornerShape(16.dp),
-                  colors = OutlinedTextFieldDefaults.colors(
-                      focusedBorderColor = Light_gray,
-                      unfocusedBorderColor = Light_gray
-                  )
-              )
-
-              Spacer(modifier = Modifier.padding(20.dp))
-
+              Spacer(modifier = Modifier.padding(bottom = 8.dp))
               Button(onClick = {
                   if (password != SignUpConfirmPassword)
                   {
@@ -233,25 +231,22 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
                       Text("Sign Up", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                   }
               }
-
-
-
-              Spacer(modifier = Modifier.height(48.dp))
-
-              Text("Already have an account?", fontSize = 16.sp)
-              Spacer(modifier = Modifier.height(8.dp))
-
-              TextButton(onClick = {
-               navController.navigate("LogIn")
-               {
-                   popUpTo("SignUp")
-                   {
-                       inclusive = true
-                   }
-               }
-              }) {
-                  Text("Log In", fontSize = 24.sp, color = Blue, fontWeight = FontWeight.Bold)
+              Spacer(modifier = Modifier.padding(top = 12.dp))
+              Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                  Text("Already have an account?", fontSize = 16.sp)
+                  TextButton(onClick = {
+                      navController.navigate("LogIn")
+                      {
+                          popUpTo("SignUp")
+                          {
+                              inclusive = true
+                          }
+                      }
+                  }) {
+                      Text("Login", fontSize = 16.sp, color = Deep_blue, fontWeight = FontWeight.Bold)
+                  }
               }
+
           }
       }
     }
