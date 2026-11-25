@@ -56,7 +56,6 @@ class AddExpenseViewmodel @Inject constructor(private val auth: FirebaseAuth,
    private var _dateError = MutableStateFlow<String?>(null)
     var dateError: StateFlow<String?> = _dateError
 
-    val id = UUID.randomUUID().toString()
 
 
 
@@ -69,6 +68,7 @@ class AddExpenseViewmodel @Inject constructor(private val auth: FirebaseAuth,
     fun saveButton(navController: NavController)
     {
         val userId = auth.currentUser?.uid.toString()
+        val id = UUID.randomUUID().toString()
 
         if (title.isEmpty())
         {
@@ -93,8 +93,6 @@ class AddExpenseViewmodel @Inject constructor(private val auth: FirebaseAuth,
             _dateError.value = "Please select date"
             return
         }
-
-
         isLoading = true
         val expense = Expenses(id,title,amount,selectedOptionText,selectDateText,note,userId)
 
