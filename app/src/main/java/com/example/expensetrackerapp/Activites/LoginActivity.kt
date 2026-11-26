@@ -72,13 +72,6 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
     var isLoading by remember {
         mutableStateOf(false)
     }
-
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
     var showResetPasswordDialog by remember {
         mutableStateOf(false)
     }
@@ -134,9 +127,9 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
             Spacer(modifier = Modifier.padding(top = 5.dp))
             Text("start your journey to better\n   financial management", fontSize = 16.sp, color = Secondary_text)
 
-                    OutlinedTextField(value =email,
+                    OutlinedTextField(value =loginViewmodel.email,
                     onValueChange = {
-                        email = it
+                        loginViewmodel.email = it
                         loginViewmodel.onEmailChange()
                     },
                    modifier = Modifier.padding(top = 220.dp),
@@ -159,8 +152,8 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
                     },
                 )
 
-                    OutlinedTextField(value =password, onValueChange = {
-                    password = it
+                    OutlinedTextField(value =loginViewmodel.password, onValueChange = {
+                    loginViewmodel.password = it
                     loginViewmodel.onPasswordChange()
                 },
                     placeholder = {
@@ -192,7 +185,7 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
 
 
             Button(onClick = {
-                loginViewmodel.Login(email.trim(),password.trim())
+                loginViewmodel.Login(loginViewmodel.email.trim(),loginViewmodel.password.trim())
             },
                 modifier = Modifier
                     .fillMaxWidth()

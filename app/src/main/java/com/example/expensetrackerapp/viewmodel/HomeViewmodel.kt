@@ -1,7 +1,6 @@
 package com.example.expensetrackerapp.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.expensetrackerapp.repository.HomeRepository
 import com.example.expensetrackerapp.utils.HomeState
 import com.google.firebase.firestore.ListenerRegistration

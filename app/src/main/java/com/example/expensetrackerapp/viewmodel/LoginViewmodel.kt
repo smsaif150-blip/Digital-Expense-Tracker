@@ -1,17 +1,23 @@
 package com.example.expensetrackerapp.viewmodel
 
 import android.util.Patterns
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.expensetrackerapp.repository.LoginRepository
 import com.example.expensetrackerapp.utils.Resource
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewmodel @Inject constructor(private val auth: FirebaseAuth): ViewModel() {
+class LoginViewmodel @Inject constructor(private val repo: LoginRepository): ViewModel() {
 
+
+    var email by mutableStateOf("")
+    var password by mutableStateOf("")
     private val _emailError = MutableStateFlow<String?>(null)
     val emailError: StateFlow<String?> = _emailError
 
@@ -38,7 +44,8 @@ class LoginViewmodel @Inject constructor(private val auth: FirebaseAuth): ViewMo
 
     fun isUserLoggedIn():Boolean
     {
-       return auth.currentUser!=null
+      // return auth.currentUser!=null
+      return  repo.userLoggedIn()
     }
     fun Login(email: String, password: String)
     {
@@ -65,14 +72,9 @@ class LoginViewmodel @Inject constructor(private val auth: FirebaseAuth): ViewMo
         }
 
         _loginState.value = Resource.Loading
-
-        auth.signInWithEmailAndPassword(email,password)
-            .addOnCompleteListener {
-                _loginState.value = Resource.Success
-            }
-            .addOnFailureListener {
-                _loginState.value = Resource.Failure(it.message.toString())
-            }
+        repo.Login(email,password){result ->
+            _loginState.value = result
+        }
     }
 
     fun resetEmailValidation(email: String): Boolean
@@ -97,11 +99,8 @@ class LoginViewmodel @Inject constructor(private val auth: FirebaseAuth): ViewMo
     }
     fun resetPassword(email: String)
     {
-        auth.sendPasswordResetEmail(email)
-            .addOnSuccessListener {
-                _resetPassState.value = Resource.Success
-            }.addOnFailureListener {
-                _resetPassState.value = Resource.Failure(it.message.toString())
-            }
+        repo.resetPassword(email) {result->
+            _resetPassState.value = result
+        }
     }
 }

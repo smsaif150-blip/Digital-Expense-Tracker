@@ -37,7 +37,6 @@ class HomeRepository @Inject constructor(private val auth: FirebaseAuth,private 
                     }?:emptyList()
 
                     onResult(HomeState.HomeSuccess(expenseList))
-
                 }
     }
 
