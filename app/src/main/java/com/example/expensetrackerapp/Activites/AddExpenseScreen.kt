@@ -233,8 +233,6 @@ fun AddExpenseScreen(navController: NavController,viewmodel: AddExpenseViewmodel
                 {
                     Text("Save", color = Pure_white)
                 }
-
-
             }
         }
     }

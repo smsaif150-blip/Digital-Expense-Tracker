@@ -44,7 +44,6 @@ class LoginViewmodel @Inject constructor(private val repo: LoginRepository): Vie
 
     fun isUserLoggedIn():Boolean
     {
-      // return auth.currentUser!=null
       return  repo.userLoggedIn()
     }
     fun Login(email: String, password: String)
@@ -102,5 +101,10 @@ class LoginViewmodel @Inject constructor(private val repo: LoginRepository): Vie
         repo.resetPassword(email) {result->
             _resetPassState.value = result
         }
+    }
+
+    fun resetLoginState()
+    {
+        _loginState.value = Resource.Test
     }
 }

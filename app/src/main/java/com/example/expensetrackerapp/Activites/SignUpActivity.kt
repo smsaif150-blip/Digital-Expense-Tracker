@@ -63,22 +63,6 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
     val emailError by signUpViewmodel.emailError.collectAsState()
     val passwordError by signUpViewmodel.passwordError.collectAsState()
 
-
-    var name by remember {
-        mutableStateOf("")
-    }
-
-    var email by remember {
-        mutableStateOf("")
-    }
-
-    var password by remember {
-        mutableStateOf("")
-    }
-
-    var SignUpConfirmPassword by remember {
-        mutableStateOf("")
-    }
     var isLoading by remember {
         mutableStateOf(false)
     }
@@ -97,6 +81,7 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
                     }
                 }
                 Toast.makeText(context,"Sign up successful", Toast.LENGTH_SHORT).show()
+                signUpViewmodel.resetSignupState()
             }
             is Resource.Failure -> {
                 isLoading = false
@@ -105,7 +90,7 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
             else -> Unit
         }
     }
-    val user = User(name,email)
+    val user = User(signUpViewmodel.name,signUpViewmodel.email)
 
 
     Box(modifier = Modifier.fillMaxSize()){
@@ -122,9 +107,9 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
               verticalArrangement = Arrangement.Center,
               horizontalAlignment = Alignment.CenterHorizontally) {
 
-              OutlinedTextField(value =name, onValueChange =
+              OutlinedTextField(value =signUpViewmodel.name, onValueChange =
                   {
-                      name = it
+                      signUpViewmodel.name = it
                       signUpViewmodel.onNameChange()
                   },
                   modifier = Modifier.padding(top = 72.dp),
@@ -149,8 +134,8 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
                   }
                   )
 
-              OutlinedTextField(value =email, onValueChange = {
-                  email = it
+              OutlinedTextField(value = signUpViewmodel.email, onValueChange = {
+                  signUpViewmodel.email = it
                   signUpViewmodel.onEmailChange()
               },
                   placeholder = {
@@ -174,9 +159,9 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
                   }
               )
 
-              OutlinedTextField(value =password, onValueChange =
+              OutlinedTextField(value = signUpViewmodel.password, onValueChange =
                   {
-                  password = it
+                  signUpViewmodel.password = it
                   signUpViewmodel.onPasswordChange()
                   },
                  // modifier = Modifier.padding(top = 20.dp),
@@ -203,12 +188,7 @@ fun SignUpActivity(navController: NavController,signUpViewmodel: SignUpViewmodel
 
               Spacer(modifier = Modifier.padding(bottom = 8.dp))
               Button(onClick = {
-                  if (password != SignUpConfirmPassword)
-                  {
-                      Toast.makeText(context,"Password didn't match", Toast.LENGTH_SHORT).show()
-                  }else{
-                      signUpViewmodel.SignUp(user,password)
-                  }
+                      signUpViewmodel.SignUp(user,signUpViewmodel.password)
               },
                   modifier = Modifier.fillMaxWidth().height(48.dp).padding(start = 50.dp, end = 50.dp),
                   colors = ButtonDefaults.buttonColors(

@@ -105,7 +105,6 @@ fun HomeActivity(navController: NavController,viewmodel: HomeViewmodel) {
                 android.util.Log.e("HOME_DATA", state.message)
             }
         }
-
     }
 
     val totalAmount = expenseList.sumOf {

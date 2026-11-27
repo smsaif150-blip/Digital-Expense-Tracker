@@ -1,8 +1,13 @@
 package com.example.expensetrackerapp.viewmodel
 
 import android.util.Patterns
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.expensetrackerapp.model.User
+import com.example.expensetrackerapp.repository.SignupRepository
 import com.example.expensetrackerapp.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,8 +17,16 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewmodel @Inject constructor(private val auth: FirebaseAuth,
-                                           private val db: FirebaseFirestore ) : ViewModel(){
+class SignUpViewmodel @Inject constructor(private val repository: SignupRepository) : ViewModel(){
+
+    var name by mutableStateOf("")
+
+
+    var email by mutableStateOf("")
+
+
+    var password by mutableStateOf("")
+
     private val _signupState = MutableStateFlow<Resource>(Resource.Test)
     val signupState: StateFlow<Resource> = _signupState
     private val _emailError = MutableStateFlow<String?>(null)
@@ -41,6 +54,7 @@ class SignUpViewmodel @Inject constructor(private val auth: FirebaseAuth,
     {
         val email = user.email.trim()
         val name = user.name.trim()
+        val updateUser = user.copy(name,email)
 
         if (name.isEmpty())
         {
@@ -72,50 +86,13 @@ class SignUpViewmodel @Inject constructor(private val auth: FirebaseAuth,
         }
 
         _signupState.value = Resource.Loading
-
-        auth.createUserWithEmailAndPassword(email,password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful)
-                {
-                    task.result.user?.let { firebaseUser ->
-                        saveUser(firebaseUser.uid,user){isSaved ->
-
-                            if (!isSaved)
-                            {
-                                firebaseUser.delete().addOnCompleteListener { deleteTask->
-                                    if (deleteTask.isSuccessful)
-                                    {
-                                       _signupState.value =  Resource.Failure("Authentication failed")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    _emailError.value = task.exception?.message.toString()
-                    _signupState.value = Resource.Failure(_emailError.value.toString())
-                }
-
-            }
-
+        repository.signUp(updateUser,password){result->
+            _signupState.value = result
+        }
     }
 
-
-
-   private fun saveUser(uId: String,user: User,isSaved:(Boolean) -> Unit)
+    fun resetSignupState()
     {
-        db.collection("users")
-            .document(uId)
-            .set(user)
-            .addOnSuccessListener {
-                _signupState.value = Resource.Success
-                isSaved(true)
-            }
-            .addOnFailureListener {
-                isSaved(false)
-               _signupState.value = Resource.Failure(it.message.toString())
-            }
+        _signupState.value = Resource.Test
     }
 }

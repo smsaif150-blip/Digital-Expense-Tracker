@@ -22,7 +22,14 @@ fun SettingsScreen(navController: NavController,homeViewmodel: HomeViewmodel) {
         val auth = FirebaseAuth.getInstance()
         TextButton(
             {auth.signOut()
-            navController.navigate("SignUp")}
+            navController.navigate("SignUp")
+            {
+                popUpTo("settings"){
+                    inclusive = true
+                }
+            }
+
+            }
 
         ) {
             Text("Sign Out")

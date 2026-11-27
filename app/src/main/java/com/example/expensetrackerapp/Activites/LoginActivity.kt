@@ -98,6 +98,8 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
             is Resource.Success -> {
                 isLoading = false
                 Toast.makeText(context,"Successfully Log in", Toast.LENGTH_SHORT).show()
+                loginViewmodel.email = ""
+                loginViewmodel.password = ""
                 navController.navigate("home")
                 {
                     popUpTo("LogIn")
@@ -105,6 +107,9 @@ fun LoginActivity(navController: NavController,loginViewmodel: LoginViewmodel)
                         inclusive = true
                     }
                 }
+
+                loginViewmodel.resetLoginState()
+
             }
             is Resource.Failure -> {
                 isLoading = false
