@@ -3,7 +3,11 @@ package com.example.expensetrackerapp.Activites
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,6 +44,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -188,23 +194,30 @@ fun AddExpenseScreen(navController: NavController,viewmodel: AddExpenseViewmodel
                 }
             }
 
-            OutlinedTextField(value = viewmodel.selectDateText,
-                onValueChange = {},
-                readOnly = true,
-                label = {Text("Select date")},
-                trailingIcon = {
-                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "Select date",
-                        modifier = Modifier.clickable{
+
+            Box(){
+
+                OutlinedTextField(value = viewmodel.selectDateText,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = {Text("Select date")},
+                    trailingIcon = {
+                        Icon(imageVector = Icons.Default.DateRange, contentDescription = "Select date")
+                    },
+                    supportingText = {
+                        if (dateError!=null)
+                        {
+                            Text(dateError.toString(), color = Color.Red)
+                        }
+                    },
+                )
+                Box(
+                    modifier = Modifier.matchParentSize()
+                        .clickable{
                             viewmodel.showDatePicker = true
-                        })
-                },
-                supportingText = {
-                    if (dateError!=null)
-                    {
-                        Text(dateError.toString(), color = Color.Red)
-                    }
-                }
-            )
+                        }
+                )
+            }
 
 
             OutlinedTextField(value = viewmodel.note
